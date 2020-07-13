@@ -1,1 +1,3 @@
-module "kemba"
+module kemba
+
+go 1.14
