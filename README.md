@@ -1,4 +1,5 @@
 # kemba
+[![Go Report Card](https://goreportcard.com/badge/clok/kemba)](https://goreportcard.com/report/clok/kemba)
 
 `debug` logging tool inspired by https://github.com/visionmedia/debug
 
