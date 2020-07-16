@@ -9,6 +9,8 @@
 
 ## Usage
 
+![example_output](https://user-images.githubusercontent.com/1429775/87724662-7112fd80-c781-11ea-86e7-95bd03c5c0a1.png)
+
 ```go
 package main
 
