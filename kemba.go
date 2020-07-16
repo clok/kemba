@@ -9,6 +9,8 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"regexp"
+	"strings"
 	"time"
 )
 
@@ -26,9 +28,9 @@ func New(tag string) *kLog {
 
 	logger := kLog{tag: tag, allowed: allowed}
 
-	if allowed != "" {
-		logger.enabled = true
-		logger.color = true
+	if os.Getenv("DEBUG") != "" {
+		logger.enabled = determineEnabled(tag, allowed)
+		logger.color = os.Getenv("NOCOLOR") == ""
 	} else {
 		logger.enabled = false
 		logger.color = false
@@ -36,7 +38,7 @@ func New(tag string) *kLog {
 
 	var prefix string
 	if logger.enabled {
-		if os.Getenv("NOCOLOR") == "" && logger.color {
+		if logger.color {
 			rand.Seed(time.Now().UnixNano())
 			cint := rand.Intn(230) + 1
 			if cint == 8 {
@@ -57,21 +59,10 @@ func New(tag string) *kLog {
 	return &logger
 }
 
-// toggleColor with turn color on and off.
-// TODO: enable functionality
-func (k kLog) toggleColor() {
-	k.color = !k.color
-}
-
 // Printf is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
 // Calling Printf(f, x, y) is equivalent to fmt.Printf(f, Formatter(x), Formatter(y)).
 func (k kLog) Printf(format string, v ...interface{}) {
 	if k.enabled {
-		// TODO: add in regex/lookup table
-		if k.allowed == "" {
-			return
-		}
-
 		var buf bytes.Buffer
 		_, _ = pretty.Fprintf(&buf, format, v...)
 
@@ -86,11 +77,6 @@ func (k kLog) Printf(format string, v ...interface{}) {
 // Calling Println(x, y) is equivalent to fmt.Println(Formatter(x), Formatter(y)), but each operand is formatted with "%# v".
 func (k kLog) Println(v ...interface{}) {
 	if k.enabled {
-		// TODO: add in regex/lookup table
-		if k.allowed == "" {
-			return
-		}
-
 		for _, x := range v {
 			var buf bytes.Buffer
 			_, _ = pretty.Fprintf(&buf, "%# v", x)
@@ -106,4 +92,39 @@ func (k kLog) Println(v ...interface{}) {
 // Log is an alias to Println
 func (k kLog) Log(v ...interface{}) {
 	k.Println(v...)
+}
+
+// determineEnabled will check the value of DEBUG environment variable to generate regex to test against the tag
+// It will split by , and perform
+// It will, replace * with .*
+// If no * then exact match
+func determineEnabled(tag string, allowed string) bool {
+	var a bool
+	for _, l := range strings.Split(allowed, ",") {
+		if strings.Contains(l, "*") {
+			reg := strings.ReplaceAll(l, "*", ".*")
+			if !strings.HasPrefix(reg, "^") {
+				reg = fmt.Sprintf("^%s", reg)
+			}
+
+			if !strings.HasSuffix(reg, "$") {
+				reg = fmt.Sprintf("%s$", reg)
+			}
+
+			if !a {
+				a, _ = regexp.Match(reg, []byte(tag))
+			}
+		} else {
+			if !a {
+				a = l == tag
+			}
+		}
+	}
+	return a
+}
+
+// toggleColor with turn color on and off.
+// TODO: enable functionality
+func (k kLog) toggleColor() {
+	k.color = !k.color
 }

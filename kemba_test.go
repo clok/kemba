@@ -42,9 +42,45 @@ func Test_New(t *testing.T) {
 
 		_ = os.Setenv("DEBUG", "")
 	})
+
+	t.Run("exact match tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:kemba")
+
+		k := New("test:kemba")
+		if k.enabled != true {
+			t.Error("Logger should be enabled")
+		}
+	})
+
+	t.Run("exact match tag [miss]", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:kemba:1")
+
+		k := New("test:kemba")
+		if k.enabled != false {
+			t.Error("Logger should be disabled")
+		}
+	})
+
+	t.Run("fuzzy match tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:*")
+
+		k := New("test:kemba")
+		if k.enabled != true {
+			t.Error("Logger should be enabled")
+		}
+	})
+
+	t.Run("fuzzy match tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "*kemba")
+
+		k := New("test:kemba:fail")
+		if k.enabled != false {
+			t.Error("Logger should be disabled")
+		}
+	})
 }
 
-func ExampleGeneral() {
+func Example() {
 	_ = os.Setenv("DEBUG", "example:*")
 	k := New("example:tag")
 	k1 := New("example:tag:1")
@@ -73,9 +109,27 @@ func ExampleGeneral() {
 	// example:tag:1 int(12)
 	// example:tag: bool(true)
 	_ = os.Setenv("DEBUG", "")
+
+	// Output:
+	// example:tag []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}}
+	// example:tag []kemba.myType{
+	// example:tag     {a:1, b:2},
+	// example:tag     {a:3, b:4},
+	// example:tag }
+	// example:tag []kemba.myType{
+	// example:tag     {a:1, b:2},
+	// example:tag     {a:3, b:4},
+	// example:tag }
+	// example:tag []kemba.myType{
+	// example:tag     {a:1, b:2},
+	// example:tag     {a:3, b:4},
+	// example:tag }
+	// example:tag:1 a string
+	// example:tag:1 int(12)
+	// example:tag:1 bool(true)
 }
 
-func ExamplePrintf() {
+func ExampleKLog_Printf() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
@@ -110,7 +164,7 @@ func ExamplePrintf() {
 	_ = os.Setenv("DEBUG", "")
 }
 
-func ExamplePrintf_With_Expanded_Struct() {
+func ExampleKLog_Printf_With_Expanded_Struct() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
@@ -124,12 +178,18 @@ func ExamplePrintf_With_Expanded_Struct() {
 	k.Printf("%# v", x)
 	_ = os.Setenv("DEBUG", "")
 
+	// Output:
+	// test:kemba Hello
+	// test:kemba []kemba.myType{
+	// test:kemba     {a:1, b:2},
+	// test:kemba     {a:3, b:4},
+	// test:kemba     {a:5, b:6},
+	// test:kemba }
 }
 
-func ExamplePrintf_With_Compact_Struct() {
+func ExampleKLog_Printf_With_Compact_Struct() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
-	k.Printf("%s", "Hello")
 
 	type myType struct {
 		a, b int
@@ -139,10 +199,14 @@ func ExamplePrintf_With_Compact_Struct() {
 	// NOTE: The "%#v" operand for the Printf format.
 	k.Printf("%#v", x)
 	_ = os.Setenv("DEBUG", "")
+
+	// Output:
+	// test:kemba []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}
 }
 
 func Test_Printf(t *testing.T) {
 	t.Run("should do nothing when no DEBUG flag is set", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "")
 		rescueStderr := os.Stderr
 		r, w, _ := os.Pipe()
 		os.Stderr = w
@@ -306,7 +370,7 @@ test:kemba }
 	})
 }
 
-func ExamplePrintln() {
+func ExampleKLog_Println() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
@@ -319,6 +383,13 @@ func ExamplePrintln() {
 
 	_ = os.Setenv("DEBUG", "")
 
+	// Output:
+	// test:kemba Hello
+	// test:kemba []kemba.myType{
+	// test:kemba     {a:1, b:2},
+	// test:kemba     {a:3, b:4},
+	// test:kemba     {a:5, b:6},
+	// test:kemba }
 }
 
 func Test_Println(t *testing.T) {
@@ -485,7 +556,7 @@ test:kemba }
 
 }
 
-func ExampleLog() {
+func ExampleKLog_Log() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
@@ -497,6 +568,14 @@ func ExampleLog() {
 	k.Log(x)
 
 	_ = os.Setenv("DEBUG", "")
+
+	// Output:
+	// test:kemba Hello
+	// test:kemba []kemba.myType{
+	// test:kemba     {a:1, b:2},
+	// test:kemba     {a:3, b:4},
+	// test:kemba     {a:5, b:6},
+	// test:kemba }
 }
 
 func Test_Log(t *testing.T) {
