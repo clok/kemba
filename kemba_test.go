@@ -44,6 +44,37 @@ func Test_New(t *testing.T) {
 	})
 }
 
+func ExampleGeneral() {
+	_ = os.Setenv("DEBUG", "example:*")
+	k := New("example:tag")
+	k1 := New("example:tag:1")
+
+	type myType struct {
+		a, b int
+	}
+
+	var x = []myType{{1, 2}, {3, 4}}
+	k.Printf("%#v", x)
+	// Output to os.Stderr
+	// example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}}
+
+	k.Printf("%# v", x)
+	k.Println(x)
+	k.Log(x)
+	// All result in the same output to os.Stderr
+	// example:tag []main.myType{
+	// example:tag     {a:1, b:2},
+	// example:tag     {a:3, b:4},
+	// example:tag }
+
+	k1.Println("a string", 12, true)
+	// Output to os.Stderr
+	// example:tag:1 a string
+	// example:tag:1 int(12)
+	// example:tag: bool(true)
+	_ = os.Setenv("DEBUG", "")
+}
+
 func ExamplePrintf() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
@@ -73,6 +104,7 @@ func ExamplePrintf() {
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 	k3.Printf("%# v", x)
+	k2.Printf("%#v", x)
 
 	k.Printf("%#v %#v %#v %#v %#v %#v", m, s, m, s, m, s)
 	_ = os.Setenv("DEBUG", "")
