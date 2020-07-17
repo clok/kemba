@@ -2,6 +2,21 @@
 ## [Unreleased]
 
 
+<a name="v0.2.0"></a>
+## [v0.2.0] - 2020-07-17
+### Bug Fixes
+- adjust go.mod package name
+
+### Chore
+- updated docs and README
+- added github actions & test coverage ([#2](https://github.com/clok/kemba/issues/2))
+- update readme with example output
+- added changelog
+
+### Tech Debt
+- reduced color list to more agreeable list of select colors
+
+
 <a name="v0.1.0"></a>
 ## v0.1.0 - 2020-07-16
 ### Chore
@@ -16,4 +31,5 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.2.0...HEAD
+[v0.2.0]: https://github.com/clok/kemba/compare/v0.1.0...v0.2.0
