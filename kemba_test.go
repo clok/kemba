@@ -1,7 +1,6 @@
 package kemba
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -129,7 +128,7 @@ func Example() {
 	// example:tag:1 bool(true)
 }
 
-func ExampleKLog_Printf() {
+func ExampleKemba_Printf() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
@@ -154,7 +153,8 @@ func ExampleKLog_Printf() {
 	k1.Printf("%# v", m)
 
 	type myType struct {
-		a, b int
+		a int
+		b int
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 	k3.Printf("%# v", x)
@@ -164,13 +164,14 @@ func ExampleKLog_Printf() {
 	_ = os.Setenv("DEBUG", "")
 }
 
-func ExampleKLog_Printf_With_Expanded_Struct() {
+func ExampleKemba_Printf_expanded() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
 
 	type myType struct {
-		a, b int
+		a int
+		b int
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 
@@ -187,12 +188,13 @@ func ExampleKLog_Printf_With_Expanded_Struct() {
 	// test:kemba }
 }
 
-func ExampleKLog_Printf_With_Compact_Struct() {
+func ExampleKemba_Printf_compact() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 
 	type myType struct {
-		a, b int
+		a int
+		b int
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 
@@ -238,7 +240,7 @@ func Test_Printf(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := fmt.Sprint("test:kemba key: test value: 1337\n")
+		wantMsg := "test:kemba key: test value: 1337\n"
 		if string(out) != wantMsg {
 			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
 		}
@@ -291,7 +293,8 @@ test:kemba string
 
 		k := New("test:kemba")
 		type myType struct {
-			a, b int
+			a int
+			b int
 		}
 		var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 		k.Printf("%#v", x)
@@ -362,7 +365,7 @@ test:kemba }
 		if !strings.Contains(string(out), "test:kemba") {
 			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
 		}
-		if os.Getenv("CI") != "" {
+		if os.Getenv("CI") == "" {
 			if !strings.Contains(string(out), "\x1b[") {
 				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
 			}
@@ -372,13 +375,14 @@ test:kemba }
 	})
 }
 
-func ExampleKLog_Println() {
+func ExampleKemba_Println() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
 
 	type myType struct {
-		a, b int
+		a int
+		b int
 	}
 	var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 	k.Println(x)
@@ -506,7 +510,8 @@ test:kemba string
 
 		k := New("test:kemba")
 		type myType struct {
-			a, b int
+			a int
+			b int
 		}
 		var x = []myType{{1, 2}, {3, 4}, {5, 6}}
 		k.Println(x)
@@ -549,7 +554,7 @@ test:kemba }
 		if !strings.Contains(string(out), "test:kemba") {
 			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
 		}
-		if os.Getenv("CI") != "" {
+		if os.Getenv("CI") == "" {
 			if !strings.Contains(string(out), "\x1b[") {
 				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
 			}
@@ -560,7 +565,7 @@ test:kemba }
 
 }
 
-func ExampleKLog_Log() {
+func ExampleKemba_Log() {
 	_ = os.Setenv("DEBUG", "test:*")
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
