@@ -14,7 +14,7 @@ import (
 	"time"
 )
 
-type kLog struct {
+type Kemba struct {
 	tag     string
 	allowed string
 	enabled bool
@@ -103,11 +103,11 @@ var (
 	}
 )
 
-// New Returns a kLog logging instance
-func New(tag string) *kLog {
+// New Returns a Kemba logging instance
+func New(tag string) *Kemba {
 	allowed := os.Getenv("DEBUG")
 
-	logger := kLog{tag: tag, allowed: allowed}
+	logger := Kemba{tag: tag, allowed: allowed}
 
 	if os.Getenv("DEBUG") != "" {
 		logger.enabled = determineEnabled(tag, allowed)
@@ -136,7 +136,7 @@ func New(tag string) *kLog {
 
 // Printf is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
 // Calling Printf(f, x, y) is equivalent to fmt.Printf(f, Formatter(x), Formatter(y)).
-func (k kLog) Printf(format string, v ...interface{}) {
+func (k Kemba) Printf(format string, v ...interface{}) {
 	if k.enabled {
 		var buf bytes.Buffer
 		_, _ = pretty.Fprintf(&buf, format, v...)
@@ -150,7 +150,7 @@ func (k kLog) Printf(format string, v ...interface{}) {
 
 // Println is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
 // Calling Println(x, y) is equivalent to fmt.Println(Formatter(x), Formatter(y)), but each operand is formatted with "%# v".
-func (k kLog) Println(v ...interface{}) {
+func (k Kemba) Println(v ...interface{}) {
 	if k.enabled {
 		for _, x := range v {
 			var buf bytes.Buffer
@@ -165,7 +165,7 @@ func (k kLog) Println(v ...interface{}) {
 }
 
 // Log is an alias to Println
-func (k kLog) Log(v ...interface{}) {
+func (k Kemba) Log(v ...interface{}) {
 	k.Println(v...)
 }
 
@@ -189,17 +189,9 @@ func determineEnabled(tag string, allowed string) bool {
 			if !a {
 				a, _ = regexp.Match(reg, []byte(tag))
 			}
-		} else {
-			if !a {
-				a = l == tag
-			}
+		} else if !a {
+			a = l == tag
 		}
 	}
 	return a
-}
-
-// toggleColor with turn color on and off.
-// TODO: enable functionality
-func (k kLog) toggleColor() {
-	k.color = !k.color
 }
