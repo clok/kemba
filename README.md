@@ -22,8 +22,7 @@ type myType struct {
 
 // When the DEBUG environment variable is set to DEBUG=example:* the kemba logger will output to STDERR
 func main () {
-    k := New("example:tag")
-    k1 := New("example:tag:1")
+    k := kemba.New("example:tag")
 	
     var x = []myType{{1, 2}, {3, 4}}
     k.Printf("%#v", x)
@@ -39,6 +38,7 @@ func main () {
     // example:tag     {a:3, b:4},
     // example:tag }
 
+    k1 := kemba.New("example:tag:1")
     k1.Println("a string", 12, true)
     // Output to os.Stderr
     // example:tag:1 a string
