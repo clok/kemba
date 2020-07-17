@@ -1,4 +1,4 @@
-module kemba
+module github.com/clok/kemba
 
 go 1.14
 
