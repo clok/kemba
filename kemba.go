@@ -135,7 +135,8 @@ func New(tag string) *Kemba {
 }
 
 // Printf is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
-// Calling Printf(f, x, y) is equivalent to fmt.Printf(f, Formatter(x), Formatter(y)).
+//
+// Calling Printf(f, x, y) is equivalent to fmt.Printf(f, pretty.Formatter(x), pretty.Formatter(y)).
 func (k Kemba) Printf(format string, v ...interface{}) {
 	if k.enabled {
 		var buf bytes.Buffer
@@ -149,7 +150,9 @@ func (k Kemba) Printf(format string, v ...interface{}) {
 }
 
 // Println is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
-// Calling Println(x, y) is equivalent to fmt.Println(Formatter(x), Formatter(y)), but each operand is formatted with "%# v".
+//
+// Calling Println(x, y) is equivalent to fmt.Println(pretty.Formatter(x), pretty.Formatter(y)),
+// but each operand is formatted with "%# v".
 func (k Kemba) Println(v ...interface{}) {
 	if k.enabled {
 		for _, x := range v {
