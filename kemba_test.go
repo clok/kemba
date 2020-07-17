@@ -162,6 +162,21 @@ func ExampleKemba_Printf() {
 
 	k.Printf("%#v %#v %#v %#v %#v %#v", m, s, m, s, m, s)
 	_ = os.Setenv("DEBUG", "")
+
+	// Output:
+	// test:kemba Hello
+	// test:kemba:1 Hello 1
+	// test:kemba:2 Hello 2
+	// test:kemba:3 Hello 3
+	// test:kemba:2 []string{"test", "again", "third"}
+	// test:kemba:1 map[string]int{"test":1, "again":1337, "third":732}
+	// test:kemba:3 []kemba.myType{
+	// test:kemba:3     {a:1, b:2},
+	// test:kemba:3     {a:3, b:4},
+	// test:kemba:3     {a:5, b:6},
+	// test:kemba:3 }
+	// test:kemba:2 []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}
+	// test:kemba map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"}
 }
 
 func ExampleKemba_Printf_expanded() {
