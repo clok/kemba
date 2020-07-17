@@ -362,8 +362,10 @@ test:kemba }
 		if !strings.Contains(string(out), "test:kemba") {
 			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
 		}
-		if !strings.Contains(string(out), "\x1b[") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
+		if os.Getenv("CI") != "" {
+			if !strings.Contains(string(out), "\x1b[") {
+				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
+			}
 		}
 
 		_ = os.Setenv("DEBUG", "")
@@ -547,8 +549,10 @@ test:kemba }
 		if !strings.Contains(string(out), "test:kemba") {
 			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
 		}
-		if !strings.Contains(string(out), "\x1b[") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
+		if os.Getenv("CI") != "" {
+			if !strings.Contains(string(out), "\x1b[") {
+				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
+			}
 		}
 
 		_ = os.Setenv("DEBUG", "")
