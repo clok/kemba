@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.2.1"></a>
+## [v0.2.1] - 2020-07-17
+### Chore
+- updates to docs
+
+
 <a name="v0.2.0"></a>
 ## [v0.2.0] - 2020-07-17
 ### Bug Fixes
@@ -12,6 +18,9 @@
 - added github actions & test coverage ([#2](https://github.com/clok/kemba/issues/2))
 - update readme with example output
 - added changelog
+
+### Release
+- **v0.2.0:** update CHANGELOG
 
 ### Tech Debt
 - reduced color list to more agreeable list of select colors
@@ -31,5 +40,6 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.2.1...HEAD
+[v0.2.1]: https://github.com/clok/kemba/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/clok/kemba/compare/v0.1.0...v0.2.0
