@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.2.2"></a>
+## [v0.2.2] - 2020-07-17
+### Chore
+- updated README example code.
+
+
 <a name="v0.2.1"></a>
 ## [v0.2.1] - 2020-07-17
 ### Chore
 - updates to docs
+
+### Release
+- **v0.2.1:** update CHANGELOG
 
 
 <a name="v0.2.0"></a>
@@ -40,6 +49,7 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.2.2...HEAD
+[v0.2.2]: https://github.com/clok/kemba/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/clok/kemba/compare/v0.2.0...v0.2.1
 [v0.2.0]: https://github.com/clok/kemba/compare/v0.1.0...v0.2.0
