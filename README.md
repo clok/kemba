@@ -9,6 +9,16 @@
 
 ## Usage
 
+The `kemba` logger reads the `DEBUG` environment variable to determine if a log line should be output. The logger outputs to `STDERR`.
+
+When it is not set, the logger will immediately return, taking no action.
+
+When the value is set (ex. `DEBUG=example:*,tool:details`), the logger will determine if it should be `enabled` when instantiated.
+
+The value of the `DEBUG` flag is a simple regex alternative where a wildcard (`*`) are replaced with `.*` and all terms are prepended with `^` and appended with `$`. If a term does not include a wildcard, then an exact match it required.
+
+To disabled colors, set the `NOCOLOR` environment variable to any value.
+
 ![example_output](https://user-images.githubusercontent.com/1429775/87724662-7112fd80-c781-11ea-86e7-95bd03c5c0a1.png)
 
 ```go
