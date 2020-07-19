@@ -48,7 +48,7 @@ func main () {
     // example:tag     {a:3, b:4},
     // example:tag }
 
-    k1 := kemba.New("example:tag:1")
+    k1 := k.Extend("1")
     k1.Println("a string", 12, true)
     // Output to os.Stderr
     // example:tag:1 a string
