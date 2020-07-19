@@ -82,7 +82,6 @@ func Test_New(t *testing.T) {
 func Example() {
 	_ = os.Setenv("DEBUG", "example:*")
 	k := New("example:tag")
-	k1 := New("example:tag:1")
 
 	type myType struct {
 		a, b int
@@ -102,11 +101,13 @@ func Example() {
 	// example:tag     {a:3, b:4},
 	// example:tag }
 
+	// Create a new extended logger with a new tag
+	k1 := k.Extend("1")
 	k1.Println("a string", 12, true)
 	// Output to os.Stderr
 	// example:tag:1 a string
 	// example:tag:1 int(12)
-	// example:tag: bool(true)
+	// example:tag:1 bool(true)
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
@@ -133,13 +134,13 @@ func ExampleKemba_Printf() {
 	k := New("test:kemba")
 	k.Printf("%s", "Hello")
 
-	k1 := New("test:kemba:1")
+	k1 := k.Extend("1")
 	k1.Printf("%s", "Hello 1")
 
-	k2 := New("test:kemba:2")
+	k2 := k.Extend("2")
 	k2.Printf("%s", "Hello 2")
 
-	k3 := New("test:kemba:3")
+	k3 := k.Extend("3")
 	k3.Printf("%s", "Hello 3")
 
 	s := []string{"test", "again", "third"}
@@ -634,5 +635,31 @@ test:kemba }
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
+	})
+}
+
+func Test_Extend(t *testing.T) {
+	t.Run("should extend the original tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:*")
+		_ = os.Setenv("NOCOLOR", "1")
+
+		rescueStderr := os.Stderr
+		r, w, _ := os.Pipe()
+		os.Stderr = w
+
+		k := New("test:kemba")
+		ke := k.Extend("extended-walrus")
+		ke.Printf("key: %s value: %d", "test", 1337)
+
+		_ = w.Close()
+		out, _ := ioutil.ReadAll(r)
+		os.Stderr = rescueStderr
+
+		wantMsg := "test:kemba:extended-walrus key: test value: 1337\n"
+		if string(out) != wantMsg {
+			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
+		}
+
+		_ = os.Setenv("DEBUG", "")
 	})
 }

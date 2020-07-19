@@ -172,6 +172,24 @@ func (k Kemba) Log(v ...interface{}) {
 	k.Println(v...)
 }
 
+// Extend returns a new Kemba logger instance that has appended the provided tag to the original logger.
+//
+// New logger instance will have original `tag` value delimited with a `:` and appended with the new extended `tag` input.
+//
+// Example:
+//     k := New("test:original)
+//     k.Log("test")
+//     ke := k.Extend("plugin")
+//     ke.Log("test extended")
+//
+// Output:
+//     test:original test
+//     test:original:plugin test extended
+func (k Kemba) Extend(tag string) *Kemba {
+	exTag := fmt.Sprintf("%s:%s", k.tag, tag)
+	return New(exTag)
+}
+
 // determineEnabled will check the value of DEBUG environment variable to generate regex to test against the tag
 // It will split by , and perform
 // It will, replace * with .*
