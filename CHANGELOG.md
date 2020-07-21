@@ -2,10 +2,22 @@
 ## [Unreleased]
 
 
+<a name="v0.4.0"></a>
+## [v0.4.0] - 2020-07-21
+### Chore
+- updated README
+
+### Features
+- **color:** deterministic color picking based on tag input for a new logger
+
+
 <a name="v0.3.0"></a>
 ## [v0.3.0] - 2020-07-19
 ### Features
 - **extend:** capability to extend existing logger with appended tag values
+
+### Release
+- **v0.3.0:** update CHANGELOG
 
 
 <a name="v0.2.3"></a>
@@ -67,7 +79,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.4.0...HEAD
+[v0.4.0]: https://github.com/clok/kemba/compare/v0.3.0...v0.4.0
 [v0.3.0]: https://github.com/clok/kemba/compare/v0.2.3...v0.3.0
 [v0.2.3]: https://github.com/clok/kemba/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/clok/kemba/compare/v0.2.1...v0.2.2
