@@ -83,6 +83,8 @@ func Test_New(t *testing.T) {
 
 func Example() {
 	_ = os.Setenv("DEBUG", "example:*")
+	// OR
+	// _ = os.Setenv("KEMBA", "example:*")
 	k := New("example:tag")
 
 	type myType struct {
@@ -635,7 +637,7 @@ func Test_Extend(t *testing.T) {
 	})
 }
 
-func Test_Private_PickColor(t *testing.T) {
+func Test_Private_pickColor(t *testing.T) {
 	is := assert.New(t)
 
 	t.Run("should return the same color for a given string", func(t *testing.T) {
@@ -643,5 +645,47 @@ func Test_Private_PickColor(t *testing.T) {
 
 		c := color.Color256{81, 0}
 		is.Equal(c.Value(), out.Value())
+	})
+}
+
+func Test_Private_getDebugFlagFromEnv(t *testing.T) {
+	is := assert.New(t)
+
+	t.Run("should return an empty string", func(t *testing.T) {
+		out := getDebugFlagFromEnv()
+
+		is.Equal("", out)
+	})
+
+	t.Run("should return value of DEBUG", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:*")
+
+		out := getDebugFlagFromEnv()
+
+		is.Equal("test:*", out)
+
+		_ = os.Setenv("DEBUG", "")
+	})
+
+	t.Run("should return value of KEMBA", func(t *testing.T) {
+		_ = os.Setenv("KEMBA", "test:*")
+
+		out := getDebugFlagFromEnv()
+
+		is.Equal("test:*", out)
+
+		_ = os.Setenv("DEBUG", "")
+	})
+
+	t.Run("should return value of DEBUG appended with KEMBA", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "debug:*")
+		_ = os.Setenv("KEMBA", "kemba:*")
+
+		out := getDebugFlagFromEnv()
+
+		is.Equal("debug:*,kemba:*", out)
+
+		_ = os.Setenv("KEMBA", "")
+		_ = os.Setenv("KEMBA", "")
 	})
 }

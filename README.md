@@ -9,13 +9,13 @@
 
 ## Usage
 
-The `kemba` logger reads the `DEBUG` environment variable to determine if a log line should be output. The logger outputs to `STDERR`.
+The `kemba` logger reads the `DEBUG` and `KEMBA` environment variables to determine if a log line should be output. The logger outputs to `STDERR`.
 
 When it is not set, the logger will immediately return, taking no action.
 
-When the value is set (ex. `DEBUG=example:*,tool:details`), the logger will determine if it should be `enabled` when instantiated.
+When the value is set (ex. `DEBUG=example:*,tool:details` and/or `KEMBA=plugin:fxn:start`), the logger will determine if it should be `enabled` when instantiated.
 
-The value of the `DEBUG` flag is a simple regex alternative where a wildcard (`*`) are replaced with `.*` and all terms are prepended with `^` and appended with `$`. If a term does not include a wildcard, then an exact match it required.
+The value of these flags can be a simple regex alternative where a wildcard (`*`) are replaced with `.*` and all terms are prepended with `^` and appended with `$`. If a term does not include a wildcard, then an exact match it required.
 
 To disabled colors, set the `NOCOLOR` environment variable to any value.
 
@@ -30,7 +30,7 @@ type myType struct {
 	a, b int
 }
 
-// When the DEBUG environment variable is set to DEBUG=example:* the kemba logger will output to STDERR
+// When the DEBUG or KEMBA environment variable is set to DEBUG=example:* the kemba logger will output to STDERR
 func main () {
     k := kemba.New("example:tag")
 	

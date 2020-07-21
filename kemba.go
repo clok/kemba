@@ -104,13 +104,34 @@ var (
 	}
 )
 
+func getDebugFlagFromEnv() string {
+	dEnv := os.Getenv("DEBUG")
+	kEnv := os.Getenv("KEMBA")
+
+	var s []string
+	if dEnv != "" {
+		s = append(s, dEnv)
+	}
+	if kEnv != "" {
+		s = append(s, kEnv)
+	}
+
+	if len(s) > 1 {
+		return strings.Join(s, ",")
+	} else if len(s) > 0 {
+		return s[0]
+	}
+
+	return ""
+}
+
 // New Returns a Kemba logging instance
 func New(tag string) *Kemba {
-	allowed := os.Getenv("DEBUG")
+	allowed := getDebugFlagFromEnv()
 
 	logger := Kemba{tag: tag, allowed: allowed}
 
-	if os.Getenv("DEBUG") != "" {
+	if logger.allowed != "" {
 		logger.enabled = determineEnabled(tag, allowed)
 		logger.color = os.Getenv("NOCOLOR") == ""
 	} else {
@@ -189,7 +210,7 @@ func (k Kemba) Extend(tag string) *Kemba {
 	return New(exTag)
 }
 
-// determineEnabled will check the value of DEBUG environment variable to generate regex to test against the tag
+// determineEnabled will check the value of DEBUG and KEMBA environment variables to generate regex to test against the tag
 //
 // If no * in string, then assume exact match
 // Else
