@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"github.com/kr/pretty"
 	"gopkg.in/gookit/color.v1"
+	"hash/crc64"
 	"log"
 	"math/rand"
 	"os"
 	"regexp"
 	"strings"
-	"time"
 )
 
 type Kemba struct {
@@ -23,6 +23,7 @@ type Kemba struct {
 }
 
 var (
+	table  = crc64.MakeTable(crc64.ISO)
 	colors = []int{
 		20,
 		21,
@@ -120,9 +121,7 @@ func New(tag string) *Kemba {
 	var prefix string
 	if logger.enabled {
 		if logger.color {
-			rand.Seed(time.Now().UnixNano())
-			c := colors[rand.Intn(len(colors)-1)]
-			s := color.C256(uint8(c))
+			s := pickColor(tag)
 			prefix = s.Sprintf("%s ", tag)
 		} else {
 			prefix = fmt.Sprintf("%s ", tag)
@@ -191,9 +190,11 @@ func (k Kemba) Extend(tag string) *Kemba {
 }
 
 // determineEnabled will check the value of DEBUG environment variable to generate regex to test against the tag
+//
+// If no * in string, then assume exact match
+// Else
 // It will split by , and perform
 // It will, replace * with .*
-// If no * then exact match
 func determineEnabled(tag string, allowed string) bool {
 	var a bool
 	for _, l := range strings.Split(allowed, ",") {
@@ -215,4 +216,16 @@ func determineEnabled(tag string, allowed string) bool {
 		}
 	}
 	return a
+}
+
+// pickColor will return the same color based on input string.
+//
+// We want to pick the same color for a given tag to ensure consistent output behavior.
+func pickColor(tag string) color.Color256 {
+	// Generate an 8 byte checksum to pass into Rand.seed
+	seed := crc64.Checksum([]byte(tag), table)
+	rand.Seed(int64(seed))
+	v := rand.Intn(len(colors) - 1)
+	s := color.C256(uint8(colors[v]))
+	return s
 }

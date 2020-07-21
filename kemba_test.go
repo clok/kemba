@@ -1,6 +1,8 @@
 package kemba
 
 import (
+	"github.com/gookit/color"
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -8,36 +10,44 @@ import (
 )
 
 func Test_New(t *testing.T) {
+	is := assert.New(t)
+
 	t.Run("simple", func(t *testing.T) {
 		k := New("test:kemba")
-		if k.enabled != false {
-			t.Error("Logger should be disabled")
-		}
-
-		if k.tag != "test:kemba" {
-			t.Errorf("%#v, wanted %#v", k.tag, "test:kemba")
-		}
-
-		if k.allowed != "" {
-			t.Errorf("%#v, wanted %#v", k.allowed, "")
-		}
+		is.False(k.enabled, "Logger should NOT be enabled")
+		is.Equal("test:kemba", k.tag)
+		is.Equal("", k.allowed)
 	})
 
 	t.Run("simple w/ DEBUG set", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:*")
 
 		k := New("test:kemba")
-		if k.enabled != true {
-			t.Error("Logger should be enabled")
-		}
+		is.True(k.enabled, "Logger should be enabled")
+		is.Equal("test:kemba", k.tag)
+		is.Equal("test:*", k.allowed)
 
-		if k.tag != "test:kemba" {
-			t.Errorf("%#v, wanted %#v", k.tag, "test:kemba")
-		}
+		_ = os.Setenv("DEBUG", "")
+	})
 
-		if k.allowed != "test:*" {
-			t.Errorf("%#v, wanted %#v", k.allowed, "test:*")
-		}
+	t.Run("should pick the same color for a given tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:*")
+		rescueStderr := os.Stderr
+		r, w, _ := os.Pipe()
+		os.Stderr = w
+
+		k1 := New("test:kemba")
+		k2 := New("test:kemba")
+		k1.Log("this shoulc be the same color")
+		k2.Log("this shoulc be the same color")
+
+		_ = w.Close()
+		out, _ := ioutil.ReadAll(r)
+		os.Stderr = rescueStderr
+
+		lines := strings.Split(string(out), "\n")
+
+		is.Equal(lines[0], lines[1], "Both lines should have the same color prompt")
 
 		_ = os.Setenv("DEBUG", "")
 	})
@@ -46,36 +56,28 @@ func Test_New(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:kemba")
 
 		k := New("test:kemba")
-		if k.enabled != true {
-			t.Error("Logger should be enabled")
-		}
+		is.True(k.enabled, "Logger should be enabled")
 	})
 
 	t.Run("exact match tag [miss]", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:kemba:1")
 
 		k := New("test:kemba")
-		if k.enabled != false {
-			t.Error("Logger should be disabled")
-		}
+		is.False(k.enabled, "Logger should NOT be enabled")
 	})
 
 	t.Run("fuzzy match tag", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:*")
 
 		k := New("test:kemba")
-		if k.enabled != true {
-			t.Error("Logger should be enabled")
-		}
+		is.True(k.enabled, "Logger should be enabled")
 	})
 
 	t.Run("fuzzy match tag", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "*kemba")
 
 		k := New("test:kemba:fail")
-		if k.enabled != false {
-			t.Error("Logger should be disabled")
-		}
+		is.False(k.enabled, "Logger should NOT be enabled")
 	})
 }
 
@@ -223,6 +225,8 @@ func ExampleKemba_Printf_compact() {
 }
 
 func Test_Printf(t *testing.T) {
+	is := assert.New(t)
+
 	t.Run("should do nothing when no DEBUG flag is set", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "")
 		rescueStderr := os.Stderr
@@ -236,9 +240,7 @@ func Test_Printf(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		if string(out) != "" {
-			t.Errorf("%#v, wanted %#v", string(out), "")
-		}
+		is.Equal("", string(out))
 	})
 
 	t.Run("should prepend tag on simple string", func(t *testing.T) {
@@ -256,10 +258,7 @@ func Test_Printf(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := "test:kemba key: test value: 1337\n"
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal("test:kemba key: test value: 1337\n", string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -291,9 +290,7 @@ test:kemba a
 test:kemba multiline
 test:kemba string
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -320,9 +317,7 @@ test:kemba string
 		os.Stderr = rescueStderr
 
 		wantMsg := "test:kemba []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}\n"
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -353,9 +348,7 @@ test:kemba     {a:3, b:4},
 test:kemba     {a:5, b:6},
 test:kemba }
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -375,16 +368,10 @@ test:kemba }
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		if !strings.Contains(string(out), "key: test value: 1337") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "key: test value: 1337")
-		}
-		if !strings.Contains(string(out), "test:kemba") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
-		}
+		is.Contains(string(out), "key: test value: 1337")
+		is.Contains(string(out), "test:kemba")
 		if os.Getenv("CI") == "" {
-			if !strings.Contains(string(out), "\x1b[") {
-				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
-			}
+			is.Contains(string(out), "\x1b[")
 		}
 
 		_ = os.Setenv("DEBUG", "")
@@ -415,6 +402,8 @@ func ExampleKemba_Println() {
 }
 
 func Test_Println(t *testing.T) {
+	is := assert.New(t)
+
 	t.Run("should do nothing when no DEBUG flag is set", func(t *testing.T) {
 		rescueStderr := os.Stderr
 		r, w, _ := os.Pipe()
@@ -427,9 +416,7 @@ func Test_Println(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		if string(out) != "" {
-			t.Errorf("%#v, wanted %#v", string(out), "")
-		}
+		is.Equal("", string(out))
 	})
 
 	t.Run("should prepend tag on simple string", func(t *testing.T) {
@@ -447,10 +434,7 @@ func Test_Println(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := "test:kemba test\n"
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal("test:kemba test\n", string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -474,9 +458,7 @@ func Test_Println(t *testing.T) {
 		wantMsg := `test:kemba test
 test:kemba int(1337)
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -508,9 +490,7 @@ test:kemba a
 test:kemba multiline
 test:kemba string
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -542,9 +522,7 @@ test:kemba     {a:3, b:4},
 test:kemba     {a:5, b:6},
 test:kemba }
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -564,16 +542,10 @@ test:kemba }
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		if !strings.Contains(string(out), "int(1337)") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "int(1337)")
-		}
-		if !strings.Contains(string(out), "test:kemba") {
-			t.Errorf("Expected string %#v to contain %#v", string(out), "test:kemba")
-		}
+		is.Contains(string(out), "int(1337)")
+		is.Contains(string(out), "test:kemba")
 		if os.Getenv("CI") == "" {
-			if !strings.Contains(string(out), "\x1b[") {
-				t.Errorf("Expected string %#v to contain %#v", string(out), "\x1b[")
-			}
+			is.Contains(string(out), "\x1b[")
 		}
 
 		_ = os.Setenv("DEBUG", "")
@@ -604,6 +576,8 @@ func ExampleKemba_Log() {
 }
 
 func Test_Log(t *testing.T) {
+	is := assert.New(t)
+
 	t.Run("should prepend tag on typed struct", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:*")
 		_ = os.Setenv("NOCOLOR", "1")
@@ -629,9 +603,7 @@ test:kemba     {a:3, b:4},
 test:kemba     {a:5, b:6},
 test:kemba }
 `
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal(wantMsg, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -639,6 +611,8 @@ test:kemba }
 }
 
 func Test_Extend(t *testing.T) {
+	is := assert.New(t)
+
 	t.Run("should extend the original tag", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:*")
 		_ = os.Setenv("NOCOLOR", "1")
@@ -655,11 +629,19 @@ func Test_Extend(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := "test:kemba:extended-walrus key: test value: 1337\n"
-		if string(out) != wantMsg {
-			t.Errorf("%#v, wanted %#v", string(out), wantMsg)
-		}
+		is.Equal("test:kemba:extended-walrus key: test value: 1337\n", string(out))
 
 		_ = os.Setenv("DEBUG", "")
+	})
+}
+
+func Test_Private_PickColor(t *testing.T) {
+	is := assert.New(t)
+
+	t.Run("should return the same color for a given string", func(t *testing.T) {
+		out := pickColor("test:kemba")
+
+		c := color.Color256{81, 0}
+		is.Equal(c.Value(), out.Value())
 	})
 }
