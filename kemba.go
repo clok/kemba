@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-type Kemba struct {
+type kemba struct {
 	tag     string
 	allowed string
 	enabled bool
@@ -128,11 +128,11 @@ func getDebugFlagFromEnv() string {
 	return ""
 }
 
-// New Returns a Kemba logging instance
-func New(tag string) *Kemba {
+// New Returns a kemba logging instance
+func New(tag string) *kemba {
 	allowed := getDebugFlagFromEnv()
 
-	logger := Kemba{tag: tag, allowed: allowed}
+	logger := kemba{tag: tag, allowed: allowed}
 
 	if logger.allowed != "" {
 		logger.enabled = determineEnabled(tag, allowed)
@@ -161,7 +161,7 @@ func New(tag string) *Kemba {
 // Printf is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
 //
 // Calling Printf(f, x, y) is equivalent to fmt.Printf(f, pretty.Formatter(x), pretty.Formatter(y)).
-func (k *Kemba) Printf(format string, v ...interface{}) {
+func (k *kemba) Printf(format string, v ...interface{}) {
 	if k.enabled {
 		elapsed := k.determineElapsed()
 
@@ -177,7 +177,7 @@ func (k *Kemba) Printf(format string, v ...interface{}) {
 //
 // Calling Println(x, y) is equivalent to fmt.Println(pretty.Formatter(x), pretty.Formatter(y)),
 // but each operand is formatted with "%# v".
-func (k *Kemba) Println(v ...interface{}) {
+func (k *kemba) Println(v ...interface{}) {
 	if k.enabled {
 		showDelta := true
 		for _, x := range v {
@@ -192,11 +192,11 @@ func (k *Kemba) Println(v ...interface{}) {
 }
 
 // Log is an alias to Println
-func (k *Kemba) Log(v ...interface{}) {
+func (k *kemba) Log(v ...interface{}) {
 	k.Println(v...)
 }
 
-// Extend returns a new Kemba logger instance that has appended the provided tag to the original logger.
+// Extend returns a new kemba logger instance that has appended the provided tag to the original logger.
 //
 // New logger instance will have original `tag` value delimited with a `:` and appended with the new extended `tag` input.
 //
@@ -209,14 +209,14 @@ func (k *Kemba) Log(v ...interface{}) {
 // Output:
 //     test:original test
 //     test:original:plugin test extended
-func (k *Kemba) Extend(tag string) *Kemba {
+func (k *kemba) Extend(tag string) *kemba {
 	exTag := fmt.Sprintf("%s:%s", k.tag, tag)
 	return New(exTag)
 }
 
 // printBuffer will append the elapsed time delta to the first line of the provided buffer
 // if the showDelta parameter is true. Otherwise, this method prints the buffer lines to STDERR
-func (k *Kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *bool) {
+func (k *kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *bool) {
 	s := bufio.NewScanner(&buf)
 	for s.Scan() {
 		if *showDelta {
@@ -235,8 +235,8 @@ func (k *Kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *
 }
 
 // determineElapsed will determine the time delta from between the last log event for this
-// Kemba logger and return the elapsed time.
-func (k *Kemba) determineElapsed() time.Duration {
+// kemba logger and return the elapsed time.
+func (k *kemba) determineElapsed() time.Duration {
 	now := time.Now()
 	elapsed := now.Sub(k.tlast)
 	k.tlast = now
