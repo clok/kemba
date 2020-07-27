@@ -2,9 +2,16 @@
 ## [Unreleased]
 
 
+<a name="v0.6.1"></a>
+## [v0.6.1] - 2020-07-27
+### Chore
+- do not export base kemba struct
+
+
 <a name="v0.6.0"></a>
 ## [v0.6.0] - 2020-07-27
 ### Features
+- **release:** v0.6.0
 - **time delta:** added log event time deltas to first line of logged buffer events. Resolution in ms
 
 
@@ -93,7 +100,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.6.1...HEAD
+[v0.6.1]: https://github.com/clok/kemba/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/clok/kemba/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/clok/kemba/compare/v0.4.0...v0.5.0
 [v0.4.0]: https://github.com/clok/kemba/compare/v0.3.0...v0.4.0
