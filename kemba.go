@@ -12,6 +12,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 
 type Kemba struct {
@@ -20,10 +21,12 @@ type Kemba struct {
 	enabled bool
 	logger  *log.Logger
 	color   bool
+	tlast   time.Time
 }
 
 var (
 	table  = crc64.MakeTable(crc64.ISO)
+	gs     = color.C256(uint8(240))
 	colors = []int{
 		20,
 		21,
@@ -149,6 +152,7 @@ func New(tag string) *Kemba {
 		}
 
 		logger.logger = log.New(os.Stderr, prefix, log.Lmsgprefix)
+		logger.tlast = time.Now()
 	}
 
 	return &logger
@@ -157,15 +161,15 @@ func New(tag string) *Kemba {
 // Printf is a convenience wrapper that will apply pretty.Formatter to the passed in variables.
 //
 // Calling Printf(f, x, y) is equivalent to fmt.Printf(f, pretty.Formatter(x), pretty.Formatter(y)).
-func (k Kemba) Printf(format string, v ...interface{}) {
+func (k *Kemba) Printf(format string, v ...interface{}) {
 	if k.enabled {
+		elapsed := k.determineElapsed()
+
 		var buf bytes.Buffer
 		_, _ = pretty.Fprintf(&buf, format, v...)
 
-		s := bufio.NewScanner(&buf)
-		for s.Scan() {
-			k.logger.Print(s.Text())
-		}
+		showDelta := true
+		k.printBuffer(buf, elapsed, &showDelta)
 	}
 }
 
@@ -173,22 +177,22 @@ func (k Kemba) Printf(format string, v ...interface{}) {
 //
 // Calling Println(x, y) is equivalent to fmt.Println(pretty.Formatter(x), pretty.Formatter(y)),
 // but each operand is formatted with "%# v".
-func (k Kemba) Println(v ...interface{}) {
+func (k *Kemba) Println(v ...interface{}) {
 	if k.enabled {
+		showDelta := true
 		for _, x := range v {
+			elapsed := k.determineElapsed()
+
 			var buf bytes.Buffer
 			_, _ = pretty.Fprintf(&buf, "%# v", x)
 
-			s := bufio.NewScanner(&buf)
-			for s.Scan() {
-				k.logger.Print(s.Text())
-			}
+			k.printBuffer(buf, elapsed, &showDelta)
 		}
 	}
 }
 
 // Log is an alias to Println
-func (k Kemba) Log(v ...interface{}) {
+func (k *Kemba) Log(v ...interface{}) {
 	k.Println(v...)
 }
 
@@ -205,9 +209,39 @@ func (k Kemba) Log(v ...interface{}) {
 // Output:
 //     test:original test
 //     test:original:plugin test extended
-func (k Kemba) Extend(tag string) *Kemba {
+func (k *Kemba) Extend(tag string) *Kemba {
 	exTag := fmt.Sprintf("%s:%s", k.tag, tag)
 	return New(exTag)
+}
+
+// printBuffer will append the elapsed time delta to the first line of the provided buffer
+// if the showDelta parameter is true. Otherwise, this method prints the buffer lines to STDERR
+func (k *Kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *bool) {
+	s := bufio.NewScanner(&buf)
+	for s.Scan() {
+		if *showDelta {
+			var ft string
+			if k.color {
+				ft = gs.Sprintf("+%s", elapsed.Truncate(time.Millisecond))
+			} else {
+				ft = fmt.Sprintf("+%s", elapsed.Truncate(time.Millisecond))
+			}
+			k.logger.Printf("%s %s\n", s.Text(), ft)
+			*showDelta = false
+		} else {
+			k.logger.Print(s.Text())
+		}
+	}
+}
+
+// determineElapsed will determine the time delta from between the last log event for this
+// Kemba logger and return the elapsed time.
+func (k *Kemba) determineElapsed() time.Duration {
+	now := time.Now()
+	elapsed := now.Sub(k.tlast)
+	k.tlast = now
+
+	return elapsed
 }
 
 // determineEnabled will check the value of DEBUG and KEMBA environment variables to generate regex to test against the tag

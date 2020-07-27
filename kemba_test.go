@@ -7,6 +7,7 @@ import (
 	"os"
 	"strings"
 	"testing"
+	"time"
 )
 
 func Test_New(t *testing.T) {
@@ -32,22 +33,11 @@ func Test_New(t *testing.T) {
 
 	t.Run("should pick the same color for a given tag", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "test:*")
-		rescueStderr := os.Stderr
-		r, w, _ := os.Pipe()
-		os.Stderr = w
 
 		k1 := New("test:kemba")
 		k2 := New("test:kemba")
-		k1.Log("this shoulc be the same color")
-		k2.Log("this shoulc be the same color")
 
-		_ = w.Close()
-		out, _ := ioutil.ReadAll(r)
-		os.Stderr = rescueStderr
-
-		lines := strings.Split(string(out), "\n")
-
-		is.Equal(lines[0], lines[1], "Both lines should have the same color prompt")
+		is.Equal(k1.color, k2.color)
 
 		_ = os.Setenv("DEBUG", "")
 	})
@@ -94,13 +84,18 @@ func Example() {
 	var x = []myType{{1, 2}, {3, 4}}
 	k.Printf("%#v", x)
 	// Output to os.Stderr
-	// example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}}
+	// example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}} +0s
 
+	// Artificial delay to demonstrate the time tagging
+	time.Sleep(250 * time.Millisecond)
 	k.Printf("%# v", x)
 	k.Println(x)
+
+	// Artificial delay to demonstrate the time tagging
+	time.Sleep(100 * time.Millisecond)
 	k.Log(x)
 	// All result in the same output to os.Stderr
-	// example:tag []main.myType{
+	// example:tag []main.myType{ +XXs
 	// example:tag     {a:1, b:2},
 	// example:tag     {a:3, b:4},
 	// example:tag }
@@ -109,26 +104,26 @@ func Example() {
 	k1 := k.Extend("1")
 	k1.Println("a string", 12, true)
 	// Output to os.Stderr
-	// example:tag:1 a string
+	// example:tag:1 a string +0s
 	// example:tag:1 int(12)
 	// example:tag:1 bool(true)
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// example:tag []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}}
-	// example:tag []kemba.myType{
+	// example:tag []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}} +0s
+	// example:tag []kemba.myType{ +250ms
 	// example:tag     {a:1, b:2},
 	// example:tag     {a:3, b:4},
 	// example:tag }
-	// example:tag []kemba.myType{
+	// example:tag []kemba.myType{ +0s
 	// example:tag     {a:1, b:2},
 	// example:tag     {a:3, b:4},
 	// example:tag }
-	// example:tag []kemba.myType{
+	// example:tag []kemba.myType{ +105ms
 	// example:tag     {a:1, b:2},
 	// example:tag     {a:3, b:4},
 	// example:tag }
-	// example:tag:1 a string
+	// example:tag:1 a string +0s
 	// example:tag:1 int(12)
 	// example:tag:1 bool(true)
 }
@@ -169,19 +164,19 @@ func ExampleKemba_Printf() {
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// test:kemba Hello
-	// test:kemba:1 Hello 1
-	// test:kemba:2 Hello 2
-	// test:kemba:3 Hello 3
-	// test:kemba:2 []string{"test", "again", "third"}
-	// test:kemba:1 map[string]int{"test":1, "again":1337, "third":732}
-	// test:kemba:3 []kemba.myType{
+	// test:kemba Hello +0s
+	// test:kemba:1 Hello 1 +0s
+	// test:kemba:2 Hello 2 +0s
+	// test:kemba:3 Hello 3 +0s
+	// test:kemba:2 []string{"test", "again", "third"} +0s
+	// test:kemba:1 map[string]int{"again":1337, "third":732, "test":1} +0s
+	// test:kemba:3 []kemba.myType{ +0s
 	// test:kemba:3     {a:1, b:2},
 	// test:kemba:3     {a:3, b:4},
 	// test:kemba:3     {a:5, b:6},
 	// test:kemba:3 }
-	// test:kemba:2 []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}
-	// test:kemba map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"}
+	// test:kemba:2 []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}} +0s
+	// test:kemba map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} map[string]int{"again":1337, "test":1, "third":732} []string{"test", "again", "third"} +0s
 }
 
 func ExampleKemba_Printf_expanded() {
@@ -200,8 +195,8 @@ func ExampleKemba_Printf_expanded() {
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// test:kemba Hello
-	// test:kemba []kemba.myType{
+	// test:kemba Hello +0s
+	// test:kemba []kemba.myType{ +0s
 	// test:kemba     {a:1, b:2},
 	// test:kemba     {a:3, b:4},
 	// test:kemba     {a:5, b:6},
@@ -223,7 +218,7 @@ func ExampleKemba_Printf_compact() {
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// test:kemba []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}
+	// test:kemba []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}} +0s
 }
 
 func Test_Printf(t *testing.T) {
@@ -260,7 +255,7 @@ func Test_Printf(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		is.Equal("test:kemba key: test value: 1337\n", string(out))
+		is.Regexp(`^test:kemba key: test value: 1337 \+\d+\S+\n$`, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -286,13 +281,16 @@ string`
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba this
-test:kemba is
-test:kemba a
-test:kemba multiline
-test:kemba string
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			if ln == "" {
+				continue
+			}
+			if i == 0 {
+				is.Regexp(`^test:kemba\sthis\s\+\d+\S{1,2}`, ln)
+			} else {
+				is.Regexp(`^test:kemba\s\w+$`, ln)
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -318,8 +316,7 @@ test:kemba string
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := "test:kemba []kemba.myType{kemba.myType{a:1, b:2}, kemba.myType{a:3, b:4}, kemba.myType{a:5, b:6}}\n"
-		is.Equal(wantMsg, string(out))
+		is.Regexp(`^test:kemba \[\]kemba.myType\{kemba.myType\{a:1, b:2\}, kemba.myType\{a:3, b:4\}, kemba.myType\{a:5, b:6\}\} \+\d+\w\n`, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -344,13 +341,16 @@ test:kemba string
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba []kemba.myType{
-test:kemba     {a:1, b:2},
-test:kemba     {a:3, b:4},
-test:kemba     {a:5, b:6},
-test:kemba }
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			if ln == "" {
+				continue
+			}
+			if i == 0 {
+				is.Regexp(`^test:kemba\s\[\]kemba\.myType\{\s\+\d+\S{1,2}$`, ln)
+			} else {
+				is.Regexp(`^test:kemba\s+[\{\}\:ab123456,\s]+$`, ln)
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -395,8 +395,8 @@ func ExampleKemba_Println() {
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// test:kemba Hello
-	// test:kemba []kemba.myType{
+	// test:kemba Hello +0s
+	// test:kemba []kemba.myType{ +0s
 	// test:kemba     {a:1, b:2},
 	// test:kemba     {a:3, b:4},
 	// test:kemba     {a:5, b:6},
@@ -436,7 +436,7 @@ func Test_Println(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		is.Equal("test:kemba test\n", string(out))
+		is.Regexp(`^test:kemba test \+\d+\S+\n$`, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -457,10 +457,16 @@ func Test_Println(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba test
-test:kemba int(1337)
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			switch i {
+			case 0:
+				is.Regexp(`^test:kemba\s.*.\s\+\d+\S{1,2}`, ln)
+			case 1:
+				is.Regexp(`^test:kemba\sint\(1337\)$`, ln)
+			default:
+				continue
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -486,13 +492,16 @@ string`
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba this
-test:kemba is
-test:kemba a
-test:kemba multiline
-test:kemba string
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			switch i {
+			case 0:
+				is.Regexp(`^test:kemba\s\w+.\s\+\d+\S{1,2}$`, ln)
+			case 1, 2, 3, 4:
+				is.Regexp(`^test:kemba\s\w+$`, ln)
+			default:
+				continue
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -518,13 +527,16 @@ test:kemba string
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba []kemba.myType{
-test:kemba     {a:1, b:2},
-test:kemba     {a:3, b:4},
-test:kemba     {a:5, b:6},
-test:kemba }
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			if ln == "" {
+				continue
+			}
+			if i == 0 {
+				is.Regexp(`^test:kemba\s\[\]kemba\.myType\{\s\+\d+\S{1,2}$`, ln)
+			} else {
+				is.Regexp(`^test:kemba\s+[\{\}\:ab123456,\s]+$`, ln)
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -569,8 +581,8 @@ func ExampleKemba_Log() {
 	_ = os.Setenv("DEBUG", "")
 
 	// Output:
-	// test:kemba Hello
-	// test:kemba []kemba.myType{
+	// test:kemba Hello +0s
+	// test:kemba []kemba.myType{ +0s
 	// test:kemba     {a:1, b:2},
 	// test:kemba     {a:3, b:4},
 	// test:kemba     {a:5, b:6},
@@ -599,13 +611,16 @@ func Test_Log(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		wantMsg := `test:kemba []kemba.myType{
-test:kemba     {a:1, b:2},
-test:kemba     {a:3, b:4},
-test:kemba     {a:5, b:6},
-test:kemba }
-`
-		is.Equal(wantMsg, string(out))
+		for i, ln := range strings.Split(string(out), "\n") {
+			if ln == "" {
+				continue
+			}
+			if i == 0 {
+				is.Regexp(`^test:kemba\s\[\]kemba\.myType\{\s\+\d+\S{1,2}$`, ln)
+			} else {
+				is.Regexp(`^test:kemba\s+[\{\}\:ab123456,\s]+$`, ln)
+			}
+		}
 
 		_ = os.Setenv("DEBUG", "")
 		_ = os.Setenv("NOCOLOR", "")
@@ -631,7 +646,7 @@ func Test_Extend(t *testing.T) {
 		out, _ := ioutil.ReadAll(r)
 		os.Stderr = rescueStderr
 
-		is.Equal("test:kemba:extended-walrus key: test value: 1337\n", string(out))
+		is.Regexp(`^test:kemba:extended-walrus key: test value: 1337 \+\d+\S+\n$`, string(out))
 
 		_ = os.Setenv("DEBUG", "")
 	})

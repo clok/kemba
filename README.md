@@ -19,12 +19,16 @@ The value of these flags can be a simple regex alternative where a wildcard (`*`
 
 To disabled colors, set the `NOCOLOR` environment variable to any value.
 
-![example_output](https://user-images.githubusercontent.com/1429775/87724662-7112fd80-c781-11ea-86e7-95bd03c5c0a1.png)
+![image](https://user-images.githubusercontent.com/1429775/88557149-7973ff80-cfef-11ea-8ec2-ff332fd1b25f.png)
 
 ```go
 package main
 
-import "github.com/clok/kemba"
+import (
+    "time"
+
+	"github.com/clok/kemba"
+)
 
 type myType struct {
 	a, b int
@@ -37,23 +41,29 @@ func main () {
     var x = []myType{{1, 2}, {3, 4}}
     k.Printf("%#v", x)
     // Output to os.Stderr
-    // example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}}
+    // example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}} +0s
 
+    // Artificial delay to demonstrate the time tagging
+    time.Sleep(250 * time.Millisecond)
     k.Printf("%# v", x)
     k.Println(x)
+
+    // Artificial delay to demonstrate the time tagging
+    time.Sleep(100 * time.Millisecond)
     k.Log(x)
     // All result in the same output to os.Stderr
-    // example:tag []main.myType{
+    // example:tag []main.myType{ +XXms
     // example:tag     {a:1, b:2},
     // example:tag     {a:3, b:4},
     // example:tag }
 
+    // Create a new logger with an extended tag
     k1 := k.Extend("1")
     k1.Println("a string", 12, true)
     // Output to os.Stderr
-    // example:tag:1 a string
+    // example:tag:1 a string +0s
     // example:tag:1 int(12)
-    // example:tag: bool(true)
+    // example:tag:1 bool(true)
 }
 ```
 
