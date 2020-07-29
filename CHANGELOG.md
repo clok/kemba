@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.6.2"></a>
+## [v0.6.2] - 2020-07-29
+### Chore
+- updated docs on exported struct
+
+
 <a name="v0.6.1"></a>
 ## [v0.6.1] - 2020-07-27
 ### Chore
 - do not export base kemba struct
+
+### Features
+- **release:** v0.6.1
 
 
 <a name="v0.6.0"></a>
@@ -100,7 +109,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.6.2...HEAD
+[v0.6.2]: https://github.com/clok/kemba/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/clok/kemba/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/clok/kemba/compare/v0.5.0...v0.6.0
 [v0.5.0]: https://github.com/clok/kemba/compare/v0.4.0...v0.5.0
