@@ -1,5 +1,10 @@
 # kemba
-[![Go Report Card](https://goreportcard.com/badge/clok/kemba)](https://goreportcard.com/report/clok/kemba) [![Coverage Status](https://coveralls.io/repos/github/clok/kemba/badge.svg?branch=chore/test-coverage)](https://coveralls.io/github/clok/kemba?branch=chore/test-coverage) [![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white&style=flat-square)](https://pkg.go.dev/github.com/clok/kemba?tab=overview)
+[![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg)](https://github.com/clok/kemba/blob/master/LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/clok/kemba)](https://goreportcard.com/report/clok/kemba)
+[![Coverage Status](https://coveralls.io/repos/github/clok/kemba/badge.svg)](https://coveralls.io/github/clok/kemba)
+[![go.dev reference](https://img.shields.io/badge/go.dev-reference-007d9c?logo=go&logoColor=white)](https://pkg.go.dev/github.com/clok/kemba?tab=overview)
+[![Mentioned in Awesome
+Go](https://awesome.re/mentioned-badge-flat.svg)](https://github.com/avelino/awesome-go)
 
 `debug` logging tool inspired by https://github.com/visionmedia/debug
 
