@@ -2,10 +2,19 @@
 ## [Unreleased]
 
 
+<a name="v0.6.3"></a>
+## [v0.6.3] - 2020-08-02
+### Chore
+- update readme with new badges, including awesome-go
+
+
 <a name="v0.6.2"></a>
 ## [v0.6.2] - 2020-07-29
 ### Chore
 - updated docs on exported struct
+
+### Features
+- **release:** v0.6.2
 
 
 <a name="v0.6.1"></a>
@@ -109,7 +118,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.6.2...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.6.3...HEAD
+[v0.6.3]: https://github.com/clok/kemba/compare/v0.6.2...v0.6.3
 [v0.6.2]: https://github.com/clok/kemba/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/clok/kemba/compare/v0.6.0...v0.6.1
 [v0.6.0]: https://github.com/clok/kemba/compare/v0.5.0...v0.6.0
