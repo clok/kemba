@@ -7,5 +7,5 @@ require (
 	github.com/gookit/color v1.2.7
 	github.com/kr/pretty v0.2.0
 	github.com/stretchr/testify v1.6.1
-	gopkg.in/gookit/color.v1 v1.1.6
+	gopkg.in/gookit/color.v1 v1.2.7
 )
