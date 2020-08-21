@@ -2,10 +2,25 @@
 ## [Unreleased]
 
 
+<a name="v0.6.4"></a>
+## [v0.6.4] - 2020-08-21
+### Chore
+- **dependencies:** remove duplicate sync of gookit/color
+- **deps:** update module kr/pretty to v0.2.1 ([#6](https://github.com/clok/kemba/issues/6))
+- **deps:** update module gookit/color to v1.2.7 ([#4](https://github.com/clok/kemba/issues/4))
+- **deps:** add renovate.json ([#3](https://github.com/clok/kemba/issues/3))
+- **renovate:** update config
+- **renovate:** clean up dupe config
+- **renovate:** add config file
+
+
 <a name="v0.6.3"></a>
 ## [v0.6.3] - 2020-08-02
 ### Chore
 - update readme with new badges, including awesome-go
+
+### Features
+- **release:** v0.6.3
 
 
 <a name="v0.6.2"></a>
@@ -118,7 +133,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.6.3...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.6.4...HEAD
+[v0.6.4]: https://github.com/clok/kemba/compare/v0.6.3...v0.6.4
 [v0.6.3]: https://github.com/clok/kemba/compare/v0.6.2...v0.6.3
 [v0.6.2]: https://github.com/clok/kemba/compare/v0.6.1...v0.6.2
 [v0.6.1]: https://github.com/clok/kemba/compare/v0.6.0...v0.6.1
