@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.7.0"></a>
+## [v0.7.0] - 2020-08-21
+### Features
+- export PickColor helper method
+
+
 <a name="v0.6.4"></a>
 ## [v0.6.4] - 2020-08-21
 ### Chore
@@ -12,6 +18,9 @@
 - **renovate:** update config
 - **renovate:** clean up dupe config
 - **renovate:** add config file
+
+### Features
+- **release:** v0.6.4
 
 
 <a name="v0.6.3"></a>
@@ -133,7 +142,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.6.4...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.7.0...HEAD
+[v0.7.0]: https://github.com/clok/kemba/compare/v0.6.4...v0.7.0
 [v0.6.4]: https://github.com/clok/kemba/compare/v0.6.3...v0.6.4
 [v0.6.3]: https://github.com/clok/kemba/compare/v0.6.2...v0.6.3
 [v0.6.2]: https://github.com/clok/kemba/compare/v0.6.1...v0.6.2
