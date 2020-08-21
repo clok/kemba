@@ -1,6 +1,7 @@
 {
   "semanticCommits": true,
-  "prHourlyLimit": 2,
+  "prHourlyLimit": 5,
+  "reviewersFromCodeOwners": true,
   "labels": [
     "dependencies"
   ],
