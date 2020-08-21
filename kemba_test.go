@@ -652,11 +652,11 @@ func Test_Extend(t *testing.T) {
 	})
 }
 
-func Test_Private_pickColor(t *testing.T) {
+func Test_PickColor(t *testing.T) {
 	is := assert.New(t)
 
 	t.Run("should return the same color for a given string", func(t *testing.T) {
-		out := pickColor("test:kemba")
+		out := PickColor("test:kemba")
 
 		c := color.Color256{81, 0}
 		is.Equal(c.Value(), out.Value())

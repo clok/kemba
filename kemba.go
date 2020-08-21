@@ -24,7 +24,7 @@ type Kemba struct {
 	enabled bool
 	logger  *log.Logger
 	color   bool
-	tlast   time.Time
+	last   time.Time
 }
 
 var (
@@ -110,28 +110,8 @@ var (
 	}
 )
 
-func getDebugFlagFromEnv() string {
-	dEnv := os.Getenv("DEBUG")
-	kEnv := os.Getenv("KEMBA")
-
-	var s []string
-	if dEnv != "" {
-		s = append(s, dEnv)
-	}
-	if kEnv != "" {
-		s = append(s, kEnv)
-	}
-
-	if len(s) > 1 {
-		return strings.Join(s, ",")
-	} else if len(s) > 0 {
-		return s[0]
-	}
-
-	return ""
-}
-
-// New Returns a Kemba logging instance
+// New Returns a Kemba logging instance. It will determine if the logger should
+// bypass logging actions or be activated.
 func New(tag string) *Kemba {
 	allowed := getDebugFlagFromEnv()
 
@@ -148,14 +128,14 @@ func New(tag string) *Kemba {
 	var prefix string
 	if logger.enabled {
 		if logger.color {
-			s := pickColor(tag)
+			s := PickColor(tag)
 			prefix = s.Sprintf("%s ", tag)
 		} else {
 			prefix = fmt.Sprintf("%s ", tag)
 		}
 
 		logger.logger = log.New(os.Stderr, prefix, log.Lmsgprefix)
-		logger.tlast = time.Now()
+		logger.last = time.Now()
 	}
 
 	return &logger
@@ -217,6 +197,18 @@ func (k *Kemba) Extend(tag string) *Kemba {
 	return New(exTag)
 }
 
+// PickColor will return the same color based on input string.
+//
+// We want to pick the same color for a given tag to ensure consistent output behavior.
+func PickColor(tag string) color.Color256 {
+	// Generate an 8 byte checksum to pass into Rand.seed
+	seed := crc64.Checksum([]byte(tag), table)
+	rand.Seed(int64(seed))
+	v := rand.Intn(len(colors) - 1)
+	s := color.C256(uint8(colors[v]))
+	return s
+}
+
 // printBuffer will append the elapsed time delta to the first line of the provided buffer
 // if the showDelta parameter is true. Otherwise, this method prints the buffer lines to STDERR
 func (k *Kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *bool) {
@@ -237,12 +229,35 @@ func (k *Kemba) printBuffer(buf bytes.Buffer, elapsed time.Duration, showDelta *
 	}
 }
 
+// getDebugFlagFromEnv considers both the value of DEBUG and KEMBA env values
+// to determine the resulting logging flags to pass to the loggers.
+func getDebugFlagFromEnv() string {
+	dEnv := os.Getenv("DEBUG")
+	kEnv := os.Getenv("KEMBA")
+
+	var s []string
+	if dEnv != "" {
+		s = append(s, dEnv)
+	}
+	if kEnv != "" {
+		s = append(s, kEnv)
+	}
+
+	if len(s) > 1 {
+		return strings.Join(s, ",")
+	} else if len(s) > 0 {
+		return s[0]
+	}
+
+	return ""
+}
+
 // determineElapsed will determine the time delta from between the last log event for this
 // Kemba logger and return the elapsed time.
 func (k *Kemba) determineElapsed() time.Duration {
 	now := time.Now()
-	elapsed := now.Sub(k.tlast)
-	k.tlast = now
+	elapsed := now.Sub(k.last)
+	k.last = now
 
 	return elapsed
 }
@@ -274,16 +289,4 @@ func determineEnabled(tag string, allowed string) bool {
 		}
 	}
 	return a
-}
-
-// pickColor will return the same color based on input string.
-//
-// We want to pick the same color for a given tag to ensure consistent output behavior.
-func pickColor(tag string) color.Color256 {
-	// Generate an 8 byte checksum to pass into Rand.seed
-	seed := crc64.Checksum([]byte(tag), table)
-	rand.Seed(int64(seed))
-	v := rand.Intn(len(colors) - 1)
-	s := color.C256(uint8(colors[v]))
-	return s
 }
