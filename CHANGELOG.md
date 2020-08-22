@@ -2,10 +2,17 @@
 ## [Unreleased]
 
 
+<a name="v0.7.1"></a>
+## [v0.7.1] - 2020-08-21
+### Bug Fixes
+- return pointer to color object
+
+
 <a name="v0.7.0"></a>
 ## [v0.7.0] - 2020-08-21
 ### Features
 - export PickColor helper method
+- **release:** v0.7.0
 
 
 <a name="v0.6.4"></a>
@@ -142,7 +149,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v0.7.1...HEAD
+[v0.7.1]: https://github.com/clok/kemba/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/clok/kemba/compare/v0.6.4...v0.7.0
 [v0.6.4]: https://github.com/clok/kemba/compare/v0.6.3...v0.6.4
 [v0.6.3]: https://github.com/clok/kemba/compare/v0.6.2...v0.6.3
