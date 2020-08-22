@@ -200,13 +200,13 @@ func (k *Kemba) Extend(tag string) *Kemba {
 // PickColor will return the same color based on input string.
 //
 // We want to pick the same color for a given tag to ensure consistent output behavior.
-func PickColor(tag string) color.Color256 {
+func PickColor(tag string) *color.Color256 {
 	// Generate an 8 byte checksum to pass into Rand.seed
 	seed := crc64.Checksum([]byte(tag), table)
 	rand.Seed(int64(seed))
 	v := rand.Intn(len(colors) - 1)
 	s := color.C256(uint8(colors[v]))
-	return s
+	return &s
 }
 
 // printBuffer will append the elapsed time delta to the first line of the provided buffer
