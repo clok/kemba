@@ -24,7 +24,7 @@ type Kemba struct {
 	enabled bool
 	logger  *log.Logger
 	color   bool
-	last   time.Time
+	last    time.Time
 }
 
 var (
