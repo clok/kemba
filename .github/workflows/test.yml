@@ -33,7 +33,7 @@ jobs:
           export PATH=$PATH:$(go env GOPATH)/bin
           go test -v -covermode=count -coverprofile=coverage.out -run ^Test_
       - name: Convert coverage to lcov
-        uses: jandelgado/gcov2lcov-action@v1.0.7
+        uses: jandelgado/gcov2lcov-action@v1.0.8
         with:
           infile: coverage.out
           outfile: coverage.lcov
