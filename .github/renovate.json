@@ -9,6 +9,7 @@
     "config:base",
     ":pinAllExceptPeerDependencies"
   ],
+  "postUpdateOptions": ["gomodTidy"],
   "major": {
     "labels": [
       "dependencies",
