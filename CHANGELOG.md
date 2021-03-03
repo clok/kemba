@@ -2,10 +2,32 @@
 ## [Unreleased]
 
 
+<a name="v1.0.0"></a>
+## [v1.0.0] - 2021-03-03
+### Chore
+- **deps:** update actions/checkout action to v2 ([#11](https://github.com/clok/kemba/issues/11))
+- **deps:** update module gookit/color to v1.3.0 ([#7](https://github.com/clok/kemba/issues/7))
+- **deps:** update actions/setup-go action to v2 ([#12](https://github.com/clok/kemba/issues/12))
+- **deps:** update module stretchr/testify to v1.7.0 ([#16](https://github.com/clok/kemba/issues/16))
+- **deps:** update module gookit/color to v1.3.6 ([#15](https://github.com/clok/kemba/issues/15))
+- **deps:** update jandelgado/gcov2lcov-action action to v1.0.8 ([#14](https://github.com/clok/kemba/issues/14))
+- **deps:** update module gookit/color to v1.3.2 ([#13](https://github.com/clok/kemba/issues/13))
+- **deps:** update module gookit/color to v1.3.1 ([#8](https://github.com/clok/kemba/issues/8))
+- **deps:** update coverallsapp/github-action action to v1.1.2 ([#9](https://github.com/clok/kemba/issues/9))
+- **deps:** update jandelgado/gcov2lcov-action action to v1.0.7 ([#10](https://github.com/clok/kemba/issues/10))
+- **github actions:** add go proxy warming
+- **lint:** fix linting error on struct
+- **renovate:** add gomodTidy option
+- **renovate:** add extension for group:allNonMajor
+
+
 <a name="v0.7.1"></a>
 ## [v0.7.1] - 2020-08-21
 ### Bug Fixes
 - return pointer to color object
+
+### Features
+- **release:** v0.7.1
 
 
 <a name="v0.7.0"></a>
@@ -149,7 +171,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v0.7.1...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v1.0.0...HEAD
+[v1.0.0]: https://github.com/clok/kemba/compare/v0.7.1...v1.0.0
 [v0.7.1]: https://github.com/clok/kemba/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/clok/kemba/compare/v0.6.4...v0.7.0
 [v0.6.4]: https://github.com/clok/kemba/compare/v0.6.3...v0.6.4
