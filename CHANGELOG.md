@@ -2,6 +2,13 @@
 ## [Unreleased]
 
 
+<a name="v1.1.0"></a>
+## [v1.1.0] - 2021-03-15
+### Chore
+- **ci:** port to using golangci-lint github action
+- **go.mod:** bump to go 1.16
+
+
 <a name="v1.0.0"></a>
 ## [v1.0.0] - 2021-03-03
 ### Chore
@@ -19,6 +26,9 @@
 - **lint:** fix linting error on struct
 - **renovate:** add gomodTidy option
 - **renovate:** add extension for group:allNonMajor
+
+### Features
+- **release:** v1.0.0
 
 
 <a name="v0.7.1"></a>
@@ -171,7 +181,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v1.1.0...HEAD
+[v1.1.0]: https://github.com/clok/kemba/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/clok/kemba/compare/v0.7.1...v1.0.0
 [v0.7.1]: https://github.com/clok/kemba/compare/v0.7.0...v0.7.1
 [v0.7.0]: https://github.com/clok/kemba/compare/v0.6.4...v0.7.0
