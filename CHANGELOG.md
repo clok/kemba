@@ -8,6 +8,9 @@
 - **ci:** port to using golangci-lint github action
 - **go.mod:** bump to go 1.16
 
+### Features
+- **release:** v1.1.0
+
 
 <a name="v1.0.0"></a>
 ## [v1.0.0] - 2021-03-03
