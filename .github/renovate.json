@@ -8,7 +8,7 @@
   "extends": [
     "config:base",
     ":pinAllExceptPeerDependencies",
-    "group:allNonMajor",
+    "group:allNonMajor"
   ],
   "postUpdateOptions": ["gomodTidy"],
   "major": {
