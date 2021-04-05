@@ -1,5 +1,9 @@
 on: [ push, pull_request ]
 name: test and build
+
+env:
+  GO_VERSION: "1.16"
+
 jobs:
   coverage:
     runs-on: ubuntu-latest
@@ -8,18 +12,22 @@ jobs:
         if: success()
         uses: actions/setup-go@v2
         with:
-          go-version: 1.14.x
+          go-version: ${{ env.GO_VERSION }}
+
       - name: Checkout code
         uses: actions/checkout@v2
+
       - name: Calc coverage
         run: |
           export PATH=$PATH:$(go env GOPATH)/bin
           go test -v -covermode=count -coverprofile=coverage.out -run ^Test_
+
       - name: Convert coverage to lcov
         uses: jandelgado/gcov2lcov-action@v1.0.8
         with:
           infile: coverage.out
           outfile: coverage.lcov
+
       - name: Coveralls
         uses: coverallsapp/github-action@v1.1.2
         with:

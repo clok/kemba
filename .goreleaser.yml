@@ -1,0 +1,10 @@
+project_name: "github.com/clok/kemba"
+
+builds:
+  - skip: true
+
+changelog:
+  sort: desc
+  filters:
+    exclude:
+      - '^Merge'
