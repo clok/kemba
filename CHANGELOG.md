@@ -2,6 +2,13 @@
 ## [Unreleased]
 
 
+<a name="v1.1.1"></a>
+## [v1.1.1] - 2021-04-05
+### Ci
+- add makefile and go releaser
+- **renovate:** fix syntax error in renovate config
+
+
 <a name="v1.1.0"></a>
 ## [v1.1.0] - 2021-03-15
 ### Chore
@@ -9,6 +16,7 @@
 - **go.mod:** bump to go 1.16
 
 ### Features
+- **release:** v1.1.0
 - **release:** v1.1.0
 
 
@@ -184,7 +192,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v1.1.1...HEAD
+[v1.1.1]: https://github.com/clok/kemba/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/clok/kemba/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/clok/kemba/compare/v0.7.1...v1.0.0
 [v0.7.1]: https://github.com/clok/kemba/compare/v0.7.0...v0.7.1
