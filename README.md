@@ -43,7 +43,10 @@ type myType struct {
 func main () {
     k := kemba.New("example:tag")
 	
-    var x = []myType{{1, 2}, {3, 4}}
+    var x = []myType{
+    	{1, 2},
+    	{3, 4},
+    }
     k.Printf("%#v", x)
     // Output to os.Stderr
     // example:tag []main.myType{main.myType{a:1, b:2}, main.myType{a:3, b:4}} +0s
