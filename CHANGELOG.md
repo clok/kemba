@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v1.2.0"></a>
+## [v1.2.0] - 2022-06-10
+### Features
+- support mid tag wildcard for enabling logger ([#31](https://github.com/clok/kemba/issues/31))
+
+
 <a name="v1.1.2"></a>
 ## [v1.1.2] - 2022-06-10
 ### Bug Fixes
@@ -10,6 +16,7 @@
 - **deps:** update module github.com/gookit/color to v1.4.2 ([#21](https://github.com/clok/kemba/issues/21))
 
 ### Chore
+- update changelog for v1.1.2
 - create FUNDING.yml
 - update README
 - **deps:** update golangci/golangci-lint-action action to v3 ([#26](https://github.com/clok/kemba/issues/26))
@@ -213,7 +220,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v1.2.0...HEAD
+[v1.2.0]: https://github.com/clok/kemba/compare/v1.1.2...v1.2.0
 [v1.1.2]: https://github.com/clok/kemba/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/clok/kemba/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/clok/kemba/compare/v1.0.0...v1.1.0
