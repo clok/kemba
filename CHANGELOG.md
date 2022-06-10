@@ -2,8 +2,29 @@
 ## [Unreleased]
 
 
+<a name="v1.1.2"></a>
+## [v1.1.2] - 2022-06-10
+### Bug Fixes
+- **deps:** update all non-major dependencies ([#30](https://github.com/clok/kemba/issues/30))
+- **deps:** update module github.com/stretchr/testify to v1.7.1 ([#27](https://github.com/clok/kemba/issues/27))
+- **deps:** update module github.com/gookit/color to v1.4.2 ([#21](https://github.com/clok/kemba/issues/21))
+
+### Chore
+- create FUNDING.yml
+- update README
+- **deps:** update golangci/golangci-lint-action action to v3 ([#26](https://github.com/clok/kemba/issues/26))
+- **deps:** update actions/setup-go action to v3 ([#25](https://github.com/clok/kemba/issues/25))
+- **deps:** update actions/checkout action to v3 ([#24](https://github.com/clok/kemba/issues/24))
+- **deps:** update all non-major dependencies ([#22](https://github.com/clok/kemba/issues/22))
+- **deps:** update goreleaser/goreleaser-action action to v3 ([#28](https://github.com/clok/kemba/issues/28))
+- **deps:** update jandelgado/gcov2lcov-action action to v1.0.9 ([#29](https://github.com/clok/kemba/issues/29))
+
+
 <a name="v1.1.1"></a>
 ## [v1.1.1] - 2021-04-05
+### Chore
+- update changelog for v1.1.1
+
 ### Ci
 - add makefile and go releaser
 - **renovate:** fix syntax error in renovate config
@@ -192,7 +213,8 @@
 - commit
 
 
-[Unreleased]: https://github.com/clok/kemba/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/clok/kemba/compare/v1.1.2...HEAD
+[v1.1.2]: https://github.com/clok/kemba/compare/v1.1.1...v1.1.2
 [v1.1.1]: https://github.com/clok/kemba/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/clok/kemba/compare/v1.0.0...v1.1.0
 [v1.0.0]: https://github.com/clok/kemba/compare/v0.7.1...v1.0.0
