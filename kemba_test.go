@@ -65,10 +65,24 @@ func Test_New(t *testing.T) {
 	})
 
 	t.Run("fuzzy match tag", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "*kemba*")
+
+		k := New("test:kemba:fail")
+		is.True(k.enabled, "Logger should be enabled")
+	})
+
+	t.Run("fuzzy match tag [failure]", func(t *testing.T) {
 		_ = os.Setenv("DEBUG", "*kemba")
 
 		k := New("test:kemba:fail")
 		is.False(k.enabled, "Logger should NOT be enabled")
+	})
+
+	t.Run("fuzzy match tag [mid star]", func(t *testing.T) {
+		_ = os.Setenv("DEBUG", "test:*:fail")
+
+		k := New("test:kemba:fail")
+		is.True(k.enabled, "Logger should be enabled")
 	})
 }
 

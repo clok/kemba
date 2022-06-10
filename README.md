@@ -22,6 +22,8 @@ When the value is set (ex. `DEBUG=example:*,tool:details` and/or `KEMBA=plugin:f
 
 The value of these flags can be a simple regex alternative where a wildcard (`*`) are replaced with `.*` and all terms are prepended with `^` and appended with `$`. If a term does not include a wildcard, then an exact match it required.
 
+Example of a wildcard in the middle of a tag string: `DEBUG=example:*:fxn` will match tags like `[example:tag1:fxn, example:tag2:fxn, example:anything:fxn, ...]`
+
 To disabled colors, set the `NOCOLOR` environment variable to any value.
 
 ![image](https://user-images.githubusercontent.com/1429775/88557149-7973ff80-cfef-11ea-8ec2-ff332fd1b25f.png)
