@@ -273,7 +273,7 @@ func determineEnabled(tag string, allowed string) bool {
 	for _, l := range strings.Split(allowed, ",") {
 		if strings.Contains(l, "*") {
 			reg := strings.ReplaceAll(l, "*", ".*")
-			if !strings.HasPrefix(reg, "^") {
+			if !strings.HasPrefix(reg, "^") && !strings.HasPrefix(reg, "*") {
 				reg = fmt.Sprintf("^%s", reg)
 			}
 
