@@ -1,6 +1,6 @@
 module github.com/clok/kemba
 
-go 1.16
+go 1.16.15
 
 require (
 	github.com/gookit/color v1.5.1
