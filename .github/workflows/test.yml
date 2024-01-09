@@ -2,7 +2,7 @@ on: [ push, pull_request ]
 name: test and build
 
 env:
-  GO_VERSION: "1.16"
+  GO_VERSION: "1.21"
 
 jobs:
   coverage:
