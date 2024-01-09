@@ -184,14 +184,16 @@ func (k *Kemba) Log(v ...interface{}) {
 // New logger instance will have original `tag` value delimited with a `:` and appended with the new extended `tag` input.
 //
 // Example:
-//     k := New("test:original)
-//     k.Log("test")
-//     ke := k.Extend("plugin")
-//     ke.Log("test extended")
+//
+//	k := New("test:original)
+//	k.Log("test")
+//	ke := k.Extend("plugin")
+//	ke.Log("test extended")
 //
 // Output:
-//     test:original test
-//     test:original:plugin test extended
+//
+//	test:original test
+//	test:original:plugin test extended
 func (k *Kemba) Extend(tag string) *Kemba {
 	exTag := fmt.Sprintf("%s:%s", k.tag, tag)
 	return New(exTag)
