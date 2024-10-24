@@ -5,7 +5,7 @@ go 1.16
 require (
 	github.com/gookit/color v1.5.4
 	github.com/kr/pretty v0.3.1
-	github.com/stretchr/testify v1.8.4
+	github.com/stretchr/testify v1.9.0
 )
 
 require (
